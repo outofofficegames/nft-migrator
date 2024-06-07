@@ -2,17 +2,20 @@
 import { State } from 'wagmi'
 import ReactQueryProvider from './reactQuery'
 import WalletConnectProvider from './walletconnect/context'
+import PassportProvider from './passport'
 
 export default function Providers({
   children,
-  initialState,
+  initialState
 }: {
   children: React.ReactNode
   initialState?: State
 }) {
   return (
     <WalletConnectProvider initialState={initialState}>
-      <ReactQueryProvider>{children} </ReactQueryProvider>
+      <ReactQueryProvider>
+        <PassportProvider>{children} </PassportProvider>
+      </ReactQueryProvider>
     </WalletConnectProvider>
   )
 }

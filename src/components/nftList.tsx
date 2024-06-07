@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import NftItem from './nftItem'
 import { useAccount } from 'wagmi'
 import { NFT } from '@/types'
-import ConnectButton from './connectButton'
+import WalletConnectButton from './walletConnectButton'
 import { useState } from 'react'
 import Loader from './themed/loader'
 
@@ -39,7 +39,7 @@ export default function NftList() {
         <div className=" animate-ping-custom bg-secondary/30 w-96 h-96 rounded-full blur-3xl absolute animate-di" />
         <div className="relative z-20 flex flex-col items-center justify-center">
           <h1 className=" font-black text-8xl mb-6">Connect to Web3</h1>
-          <ConnectButton />
+          <WalletConnectButton />
         </div>
       </div>
     )

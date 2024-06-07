@@ -22,7 +22,7 @@ export default function Button({
       disabled={props.disabled || isLoading}
       className={clsx(
         props.className,
-        secondary ? 'bg-secondary' : 'bg-primary',
+        secondary ? 'bg-red-500' : 'bg-blue-500',
         big ? 'text-lg py-3 px-6' : 'text-sm/6 py-1.5 px-3',
         'inline-flex items-center gap-2 rounded-[28px]    font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white'
       )}
