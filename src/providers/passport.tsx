@@ -14,6 +14,7 @@ export const passport = new passportInitializer.Passport({
   scope: 'openid offline_access email transact'
 })
 
+// we use undefined state in initialization stage, null if initialized but no user
 export const PassportUserCtx = createContext<undefined | null | UserProfile>(
   undefined
 )
