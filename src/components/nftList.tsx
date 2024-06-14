@@ -66,7 +66,7 @@ export default function NftList() {
 
   return (
     <>
-      <h2 className=" font-black text-5xl mb-6">Battle Derby Passes</h2>
+      <h2 className=" font-black text-5xl my-6">Battle Derby Passes</h2>
       {data.length === 0 ? (
         <p>You do not have any NFT on {account.chain?.name}.</p>
       ) : (

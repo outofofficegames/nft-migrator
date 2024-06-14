@@ -13,7 +13,7 @@ export default function NftItem({
   openModal: React.Dispatch<boolean>
 }) {
   return (
-    <li className="text-textColor flex items-start justify-start bg-black/30 backdrop-blur-lg rounded-xl shadow-3xl px-8 py-9 gap-6">
+    <li className="text-textColor flex items-start justify-start bg-white/10 rounded-xl shadow-3xl px-8 py-9 gap-6">
       <Image
         src={item.image.cachedUrl}
         width={64}

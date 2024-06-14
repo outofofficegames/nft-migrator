@@ -10,7 +10,9 @@ import { config as wagmiConfig } from '@/providers/walletconnect'
 import clsx from 'clsx'
 import Footer from '@/components/footer'
 import { appConfig } from '@/config'
-
+import Image from 'next/image'
+import BGImage from '#/bg.png'
+import BGImageMobile from '#/bg-mobile.png'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -49,9 +51,21 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={clsx(inter.className, 'min-h-screen  flex flex-col')}>
-        <div className="absolute inset-0 -z-10 bg-[35%_top] bg-no-repeat sm:bg-[38%_top] md:bg-[40%_top] lg:bg-[44%_top] xl:bg-top forced-colors:hidden bg-bgtop" />
-        <div className="absolute inset-0 -z-10 bg-top opacity-10 forced-colors:hidden bg-bgnoise" />
+      <body
+        className={clsx(inter.className, 'min-h-screen relative flex flex-col')}
+      >
+        <Image
+          src={BGImage}
+          alt="Battle Derby"
+          fill
+          className="object-cover md:block hidden"
+        />
+        <Image
+          src={BGImageMobile}
+          alt="Battle Derby"
+          fill
+          className=" object-cover md:hidden "
+        />
         <Providers initialState={initialState}>
           <Header />
           <main className="relative mx-auto my-4 max-w-7xl md:my-8 flex flex-col flex-1">
@@ -67,7 +81,6 @@ export default function RootLayout({
             }
           }}
         />
-        <div className="absolute inset-0 -z-10 bg-[35%_bottom] bg-no-repeat mix-blend-screen sm:bg-[38%_bottom] md:bg-[40%_bottom] lg:bg-[44%_bottom] xl:bg-bottom forced-colors:hidden bg-bgbottom" />
       </body>
     </html>
   )
