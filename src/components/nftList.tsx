@@ -4,7 +4,6 @@ import NftItem from './nftItem'
 import { useAccount } from 'wagmi'
 import { NFT } from '@/types'
 import WalletConnectButton from './walletConnectButton'
-import { useState } from 'react'
 import Loader from './themed/loader'
 
 export async function getData(walletAddress: `0x${string}`) {
@@ -31,8 +30,6 @@ export default function NftList() {
     refetchIntervalInBackground: false,
     refetchInterval: 1000 * 60 * 5
   })
-  const [isTransferModalOpen, setIsTransferModalOpen] = useState(false)
-  const [selectedItem, setSelectedItem] = useState<NFT>()
   if (account.status === 'disconnected')
     return (
       <div className="flex items-center flex-col justify-center flex-1">
@@ -75,8 +72,7 @@ export default function NftList() {
             <NftItem
               key={item.contract.address + '#' + item.tokenId}
               item={item}
-              setSelectedItem={setSelectedItem}
-              openModal={setIsTransferModalOpen}
+              accountAddress={account.address}
             />
           ))}
         </ul>
