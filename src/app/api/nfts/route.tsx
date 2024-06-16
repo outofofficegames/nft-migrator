@@ -1,7 +1,7 @@
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const address = searchParams.get('address')
-  const contractAddr = process.env.CONTRACT_ADDRESS
+  const contractAddr = process.env.NEXT_PUBLIC_ORIGIN_CONTRACT_ADDRESS
   const apiKey = process.env.ALCHEMY_API_KEY
 
   const res = await fetch(

@@ -5,20 +5,21 @@ import Button from './themed/button'
 import WalletConnectButton from './walletConnectButton'
 import BDLogo from '#/bd-logo.png'
 import { useContext } from 'react'
-import { PassportUserCtx } from '@/providers/passport'
-import { useAccount } from 'wagmi'
+import { PassportUserCtx, passport } from '@/providers/passport'
+import { useAccount, useSignMessage } from 'wagmi'
 import { useQuery } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
-export async function getData(walletAddress: `0x${string}`) {
-  const res = await fetch(
-    `https://battle-derby-api-oexyjdos5a-od.a.run.app/=${walletAddress}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+export async function getWalletMap() {
+  const passportToken = await passport.getIdToken()
+
+  const res = await fetch(`/api/get-migration-map`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${passportToken}`
     }
-  )
+  })
+
   if (res.status !== 200)
     throw new Error('Fetch failed with status:' + res.status)
 
@@ -28,17 +29,52 @@ export async function getData(walletAddress: `0x${string}`) {
 export default function MapCard() {
   const passportUser = useContext(PassportUserCtx)
   const account = useAccount()
-  const merged = passportUser?.email && account.isConnected
+  const { signMessageAsync } = useSignMessage()
+  const bothWalletConnected =
+    !!passportUser?.email && account.isConnected && !!account.address
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['merged', account.address],
-    queryFn: () => getData(account.address!),
-    enabled: !!account?.address,
+  const { data: walletMap, isLoading: walletMapLoading } = useQuery({
+    queryKey: ['walletMap', account?.address, passportUser?.email],
+    queryFn: getWalletMap,
+    enabled: bothWalletConnected,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: false,
     refetchInterval: 1000 * 60 * 5
   })
+
+  const handleMerge = async () => {
+    return toast.promise(
+      new Promise(async (resolve: any) => {
+        if (!account.address) throw new Error('No address')
+        const signedMessage = await signMessageAsync({
+          account: account.address,
+          message: account.address!
+        })
+        const passportToken = await passport.getIdToken()
+
+        const response = await fetch('/api/create-migration-map', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${passportToken}`
+          },
+          body: JSON.stringify({
+            eoaWallet: account.address,
+            signedMessage: signedMessage,
+            destinationCollectionAddress:
+              process.env.NEXT_PUBLIC_DESTINATION_CONTRACT_ADDRESS
+          })
+        })
+        const data = await response.json()
+        resolve(data)
+      }),
+      {
+        loading: 'Merging...',
+        success: 'Merged!',
+        error: 'Failed to merge'
+      }
+    )
+  }
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -53,21 +89,27 @@ export default function MapCard() {
           <WalletConnectButton />
           <PassportButton />
         </div>
-        {!merged ? (
+        {walletMap ? (
+          <NftList />
+        ) : (
           <div className=" contents">
-            <p className="text-center m-6 text-white">
-              Connect your EOA wallet that you would like to migrate your nft
-              from and destionation Passport
-            </p>
+            {bothWalletConnected ? (
+              <p>Merge your account clicking merge button</p>
+            ) : (
+              <p className="text-center m-6 text-white">
+                Connect your EOA wallet that you would like to migrate your nft
+                from and destionation Passport
+              </p>
+            )}
             <Button
+              onClick={handleMerge}
               big
               title="Confirm Destionation Map"
               className="w-full justify-center"
-              // disabled
+              isLoading={walletMapLoading}
+              disabled={walletMap || !bothWalletConnected}
             />
           </div>
-        ) : (
-          <NftList />
         )}
       </div>
     </div>

@@ -2,16 +2,38 @@ import { NFT } from '@/types'
 import Image from 'next/image'
 import Button from './themed/button'
 import Link from 'next/link'
+import { useWriteContract } from 'wagmi'
+import abi from '#/abi.json'
+import { waitForTransactionReceipt } from '@wagmi/core'
+import { config } from '@/providers/walletconnect'
 
 export default function NftItem({
   item,
-  setSelectedItem,
-  openModal
+  accountAddress
 }: {
   item: NFT
-  setSelectedItem: React.Dispatch<NFT>
-  openModal: React.Dispatch<boolean>
+  accountAddress: string
 }) {
+  const { writeContractAsync } = useWriteContract()
+
+  const handleBurn = async () => {
+    const txHash = await writeContractAsync({
+      abi,
+      address: process.env.NEXT_PUBLIC_ORIGIN_CONTRACT_ADDRESS as `0x${string}`,
+      functionName: 'safeTransferFrom',
+      args: [
+        accountAddress,
+        '0x0000000000000000000000000000000000000000',
+        item.tokenId
+      ]
+    })
+    const receipt = await waitForTransactionReceipt(config, {
+      hash: txHash
+    })
+
+    console.log(receipt)
+  }
+
   return (
     <li className="text-textColor flex items-start justify-start bg-white/10 rounded-xl shadow-3xl px-8 py-9 gap-6">
       <Image
@@ -54,10 +76,7 @@ export default function NftItem({
       </Link>
       <Button
         title="Transfer NFT"
-        onClick={() => {
-          setSelectedItem(item)
-          openModal(true)
-        }}
+        onClick={handleBurn}
         className="flex-shrink-0"
       />
     </li>
