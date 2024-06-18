@@ -40,7 +40,7 @@ export default function MapCard() {
     refetchOnMount: true,
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: false,
-    refetchInterval: 1000 * 60 * 5
+    refetchInterval: 0
   })
 
   const handleMerge = async () => {
