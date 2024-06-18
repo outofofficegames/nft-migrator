@@ -1,14 +1,19 @@
 import { passport as passportInitializer, config } from '@imtbl/sdk'
 import { UserProfile } from '@imtbl/sdk/passport'
 import { createContext, useEffect, useState } from 'react'
+
+const clientId = process.env.NEXT_PUBLIC_IMX_CLIENT_ID
+const redirectUri = process.env.NEXT_PUBLIC_IMX_REDIRECT_URI
+if (!clientId) throw new Error('NEXT_PUBLIC_IMX_CLIENT_ID not set')
+if (!redirectUri) throw new Error('NEXT_PUBLIC_IMX_REDIRECT_URI not set')
 export const passport = new passportInitializer.Passport({
   baseConfig: {
     environment: config.Environment.SANDBOX,
     publishableKey: process.env.NEXT_PUBLIC_IMX_PUB_KEY
   },
-  clientId: process.env.NEXT_PUBLIC_IMX_CLIENT_ID!,
-  redirectUri: 'http://localhost:3001/login',
-  logoutRedirectUri: 'http://localhost:3001',
+  clientId,
+  redirectUri,
+  logoutRedirectUri: process.env.NEXT_PUBLIC_IMX_LOGOUT_URI,
   logoutMode: 'redirect',
   audience: 'platform_api',
   scope: 'openid offline_access email transact'
