@@ -10,7 +10,8 @@ export async function GET(request: Request) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      next: { revalidate: 0 }
     }
   )
   const data = await res.json()

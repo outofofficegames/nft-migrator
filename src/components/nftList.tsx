@@ -11,7 +11,8 @@ export async function getData(walletAddress: `0x${string}`) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    next: { revalidate: 0 }
   })
   if (res.status !== 200)
     throw new Error('Fetch failed with status:' + res.status)
@@ -28,7 +29,7 @@ export default function NftList() {
     refetchOnMount: true,
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: false,
-    refetchInterval: 1000 * 60 * 5
+    refetchInterval: 0
   })
   if (account.status === 'disconnected')
     return (
