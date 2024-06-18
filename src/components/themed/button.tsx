@@ -22,7 +22,7 @@ export default function Button({
       disabled={props.disabled || isLoading}
       className={clsx(
         props.className,
-        props.disabled
+        props.disabled || isLoading
           ? 'bg-gray-400/30'
           : secondary
             ? 'bg-red-500'

@@ -4,10 +4,10 @@ import PassportButton from './passportConnectButton'
 import Button from './themed/button'
 import WalletConnectButton from './walletConnectButton'
 import BDLogo from '#/bd-logo.png'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { PassportUserCtx, passport } from '@/providers/passport'
 import { useAccount, useSignMessage } from 'wagmi'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 export async function getWalletMap() {
@@ -30,10 +30,12 @@ export default function MapCard() {
   const passportUser = useContext(PassportUserCtx)
   const account = useAccount()
   const { signMessageAsync } = useSignMessage()
+  const client = useQueryClient()
+  const [isWalletMapping, setIsWalletMapping] = useState(false)
   const bothWalletConnected =
     !!passportUser?.email && account.isConnected && !!account.address
 
-  const { data: walletMap, isLoading: walletMapLoading } = useQuery({
+  const { data: walletMap, isLoading: walletMapFetching } = useQuery({
     queryKey: ['walletMap', account?.address, passportUser?.email],
     queryFn: getWalletMap,
     enabled: bothWalletConnected,
@@ -45,33 +47,56 @@ export default function MapCard() {
 
   const handleMerge = async () => {
     return toast.promise(
-      new Promise(async (resolve: any) => {
-        if (!account.address) throw new Error('No address')
-        const signedMessage = await signMessageAsync({
-          account: account.address,
-          message: account.address!
-        })
-        const passportToken = await passport.getIdToken()
+      new Promise(async (res, rej) => {
+        try {
+          setIsWalletMapping(true)
+          if (!account.address) throw new Error('No address')
 
-        const response = await fetch('/api/create-migration-map', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${passportToken}`
-          },
-          body: JSON.stringify({
-            eoaWallet: account.address,
-            signedMessage: signedMessage,
-            destinationCollectionAddress:
-              process.env.NEXT_PUBLIC_DESTINATION_CONTRACT_ADDRESS
+          const signedMessage = await signMessageAsync(
+            {
+              account: account.address,
+              message: account.address!
+            },
+            {
+              onError: (e) => rej(e),
+              onSettled(_, e) {
+                if (e) rej(e)
+              }
+            }
+          )
+
+          const passportToken = await passport.getIdToken()
+
+          const response = await fetch('/api/create-migration-map', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${passportToken}`
+            },
+            body: JSON.stringify({
+              eoaWallet: account.address,
+              signedMessage: signedMessage,
+              destinationCollectionAddress:
+                process.env.NEXT_PUBLIC_DESTINATION_CONTRACT_ADDRESS
+            })
           })
-        })
-        const data = await response.json()
-        resolve(data)
+          if (!response.ok) rej(new Error('Fetch failed'))
+          const data = await response.json()
+          await client.invalidateQueries({
+            queryKey: ['walletMap', account?.address, passportUser?.email]
+          })
+
+          res(data)
+        } catch (e) {
+          rej(e)
+        } finally {
+          setIsWalletMapping(false)
+        }
       }),
       {
-        loading: 'Merging...',
-        success: 'Merged!',
-        error: 'Failed to merge'
+        loading: 'Merging wallets, please wait...',
+        success: 'Merged successfully!',
+        error: (e) =>
+          `Merge Error: ${e instanceof Error ? e.message : 'Unkown error'}`
       }
     )
   }
@@ -106,7 +131,7 @@ export default function MapCard() {
               big
               title="Confirm Destionation Map"
               className="w-full justify-center"
-              isLoading={walletMapLoading}
+              isLoading={walletMapFetching || isWalletMapping}
               disabled={walletMap || !bothWalletConnected}
             />
           </div>
