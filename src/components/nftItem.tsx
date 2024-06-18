@@ -6,6 +6,8 @@ import { useWriteContract } from 'wagmi'
 import abi from '#/abi.json'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { config } from '@/providers/walletconnect'
+import toast from 'react-hot-toast'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function NftItem({
   item,
@@ -15,23 +17,43 @@ export default function NftItem({
   accountAddress: string
 }) {
   const { writeContractAsync } = useWriteContract()
-
+  const client = useQueryClient()
   const handleBurn = async () => {
-    const txHash = await writeContractAsync({
-      abi,
-      address: process.env.NEXT_PUBLIC_ORIGIN_CONTRACT_ADDRESS as `0x${string}`,
-      functionName: 'safeTransferFrom',
-      args: [
-        accountAddress,
-        '0x0000000000000000000000000000000000000000',
-        item.tokenId
-      ]
-    })
-    const receipt = await waitForTransactionReceipt(config, {
-      hash: txHash
-    })
+    toast.promise(
+      new Promise(async (res, rej) => {
+        try {
+          const txHash = await writeContractAsync({
+            abi,
+            address: process.env
+              .NEXT_PUBLIC_ORIGIN_CONTRACT_ADDRESS as `0x${string}`,
+            functionName: 'transferFrom',
+            args: [
+              accountAddress,
+              // '0xd31fE3b2c23bbf7301deB5888F0627482A7622B6',
+              '0x0000000000000000000000000000000000000000',
+              item.tokenId
+            ]
+          })
+          const receipt = await waitForTransactionReceipt(config, {
+            hash: txHash
+          })
 
-    console.log(receipt)
+          if (receipt.status === 'reverted')
+            rej(new Error('Transaction reverted'))
+          await client.invalidateQueries({ queryKey: ['nfts', accountAddress] })
+
+          res(receipt.status)
+        } catch (e) {
+          rej(e)
+        }
+      }),
+      {
+        loading: 'Burning the token',
+        error: (e) =>
+          `Error while burning: ${e instanceof Error ? e.message : 'Unknown message'}`,
+        success: 'Successfully burned'
+      }
+    )
   }
 
   return (
@@ -75,7 +97,8 @@ export default function NftItem({
         </svg>
       </Link>
       <Button
-        title="Transfer NFT"
+        secondary
+        title="Burn NFT"
         onClick={handleBurn}
         className="flex-shrink-0"
       />
