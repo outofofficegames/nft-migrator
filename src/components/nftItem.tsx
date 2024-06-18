@@ -29,8 +29,7 @@ export default function NftItem({
             functionName: 'transferFrom',
             args: [
               accountAddress,
-              // '0xd31fE3b2c23bbf7301deB5888F0627482A7622B6',
-              '0x0000000000000000000000000000000000000000',
+              '0x000000000000000000000000000000000000dead',
               item.tokenId
             ]
           })
