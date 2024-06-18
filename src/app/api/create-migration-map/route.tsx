@@ -13,7 +13,8 @@ export async function POST(request: Request) {
         'X-API-KEY': `${process.env.BATTLE_DERBY_API_KEY}`,
         Authorization: auth
       },
-      body: JSON.stringify(parsed)
+      body: JSON.stringify(parsed),
+      next: { revalidate: 0 }
     }
   )
   const data = await res.json()

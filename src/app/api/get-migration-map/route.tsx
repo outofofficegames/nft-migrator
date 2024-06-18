@@ -10,7 +10,8 @@ export async function GET(request: Request) {
         'Content-Type': 'application/json',
         'X-API-KEY': `${process.env.BATTLE_DERBY_API_KEY}`,
         Authorization: auth
-      }
+      },
+      next: { revalidate: 0 }
     }
   )
   const data = await res.json()
