@@ -3,7 +3,7 @@ export async function GET(request: Request) {
   if (!auth) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
   const res = await fetch(
-    `https://battle-derby-api-oexyjdos5a-od.a.run.app/account/get-migration-map`,
+    `${process.env.BACKEND_API_URL}/account/get-migration-map`,
     {
       method: 'GET',
       headers: {

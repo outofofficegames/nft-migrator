@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   const parsed = await request.json()
 
   const res = await fetch(
-    `https://battle-derby-api-oexyjdos5a-od.a.run.app/account/create-migration-map`,
+    `${process.env.BACKEND_API_URL}/account/create-migration-map`,
     {
       method: 'POST',
       headers: {
