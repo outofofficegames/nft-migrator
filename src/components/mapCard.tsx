@@ -46,7 +46,7 @@ export default function MapCard() {
   })
 
   const handleMerge = async () => {
-    return toast.promise(
+    toast.promise(
       new Promise(async (res, rej) => {
         try {
           setIsWalletMapping(true)
