@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Russo_One } from 'next/font/google'
 import './globals.css'
 import Providers from '@/providers'
 import { Toaster } from 'react-hot-toast'
@@ -14,10 +14,16 @@ import Image from 'next/image'
 import BGImage from '#/bg.png'
 import BGImageMobile from '#/bg-mobile.png'
 const inter = Inter({ subsets: ['latin'] })
-
+const russo = Russo_One({
+  subsets: ['latin'],
+  weight: ['400'],
+  display: 'swap',
+  variable: '--font-russo'
+})
 export const metadata: Metadata = {
   title: appConfig.metadata.name,
   description: appConfig.metadata.description,
+  metadataBase: new URL('https://migrate.battlederby.com'),
   keywords: [
     'Battle Derby',
     'Web3 gaming',
@@ -52,7 +58,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={clsx(inter.className, 'min-h-screen relative flex flex-col')}
+        className={clsx(
+          inter.className,
+          russo.variable,
+          'min-h-screen relative flex flex-col'
+        )}
       >
         <Image
           src={BGImage}

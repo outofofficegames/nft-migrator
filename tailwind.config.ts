@@ -6,7 +6,11 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        russo: ['var(--font-russo)']
+      }
+    }
   },
   plugins: [require('@headlessui/tailwindcss')]
 }

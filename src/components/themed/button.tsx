@@ -28,11 +28,11 @@ export default function Button({
             ? 'bg-red-500'
             : 'bg-blue-500',
         big ? 'text-lg py-3 px-6' : 'text-sm/6 py-1.5 px-3',
-        'inline-flex items-center gap-2 rounded-[28px]    font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-blue-500/90 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white'
+        'inline-flex font-russo items-center gap-2 rounded-[28px]    font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-blue-500/90 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white'
       )}
     >
       {isLoading ? <Loader size="md" tint="fill-white" /> : null}
-      <span className={clsx(isLoading && 'ml-1')}> {title}</span>
+      <span className={clsx(isLoading && 'ml-1')}>{title}</span>
     </ThemedButton>
   )
 }
