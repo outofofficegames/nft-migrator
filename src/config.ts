@@ -1,9 +1,9 @@
 export const appConfig = {
-    metadata: {
-        name: "Battle Derby | Migrator",
-        description: "Migrate your Battle Derby Pass nfts to Immutable zkEVM",
-    },
-    next: {
-        revalidate: 1000 * 60 * 60,
-    },
-};
+  metadata: {
+    name: 'Migrator | Battle Derby',
+    description: 'Migrate your Battle Derby Passes to your Immutable Passport'
+  },
+  next: {
+    revalidate: 1000 * 60 * 60
+  }
+}
