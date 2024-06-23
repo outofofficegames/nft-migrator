@@ -9,6 +9,7 @@ import { PassportUserCtx, passport } from '@/providers/passport'
 import { useAccount, useSignMessage } from 'wagmi'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
+import Informer from './themed/informer'
 
 export async function getWalletMap() {
   const passportToken = await passport.getIdToken()
@@ -119,21 +120,24 @@ export default function MapCard() {
         ) : (
           <div className=" contents">
             {bothWalletConnected ? (
-              <p>Merge your account clicking merge button</p>
+              <>
+                <Informer text={'Merge your account clicking merge button'} />
+                <Button
+                  onClick={handleMerge}
+                  big
+                  title="Confirm Destionation Map"
+                  className="w-full justify-center"
+                  isLoading={walletMapFetching || isWalletMapping}
+                  disabled={walletMap || !bothWalletConnected}
+                />
+              </>
             ) : (
-              <p className="text-center m-6 text-white">
-                Connect your EOA wallet that you would like to migrate your nft
-                from and destionation Passport
-              </p>
+              <Informer
+                text={
+                  'Connect your EOA wallet that you would like to migrate your nft from and destionation Passport'
+                }
+              />
             )}
-            <Button
-              onClick={handleMerge}
-              big
-              title="Confirm Destionation Map"
-              className="w-full justify-center"
-              isLoading={walletMapFetching || isWalletMapping}
-              disabled={walletMap || !bothWalletConnected}
-            />
           </div>
         )}
       </div>
