@@ -14,7 +14,12 @@ export default function PassportButton() {
   const handleLogin = async () => {
     const user = await passport.login()
     if (user) {
-      passportUserSet?.(user)
+      const provider = passport.connectEvm()
+      const rpcResponse: any = await provider.send({
+        method: 'eth_requestAccounts'
+      })
+
+      passportUserSet?.({ ...user, address: rpcResponse.result[0] })
     }
   }
   const handleLogout = () => {
@@ -26,14 +31,15 @@ export default function PassportButton() {
   if (passportUser)
     return (
       <div
+        title="Disconnect"
         onClick={handleLogout}
         className="flex gap-2 items-center rounded-full px-4 py-1.5 bg-white/10 border border-white/10 cursor-pointer"
       >
         <Image src={ImxLogo} width={30} height={30} alt="immutable passport" />
-        <span className="text-white text-sm">{`${passportUser.email?.slice(0, 4)}...${passportUser.email?.slice(-4)}`}</span>
+        <span className="text-white text-sm">{`${passportUser.address?.slice(0, 4)}...${passportUser.address?.slice(-4)}`}</span>
         <Image src={PowerOffIcon} width={20} height={20} alt="logout" />
       </div>
     )
 
-  return <Button onClick={handleLogin} title="Login with Passport" />
+  return <Button onClick={handleLogin} title="Connect Immutable Passport" />
 }

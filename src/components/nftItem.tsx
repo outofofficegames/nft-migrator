@@ -8,13 +8,14 @@ import { waitForTransactionReceipt } from '@wagmi/core'
 import { config } from '@/providers/walletconnect'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
+import StrokedText from './themed/strokedText'
 
 export default function NftItem({
   item,
   accountAddress
 }: {
   item: NFT
-  accountAddress: string
+  accountAddress: `0x${string}`
 }) {
   const { writeContractAsync } = useWriteContract()
   const client = useQueryClient()
@@ -56,51 +57,35 @@ export default function NftItem({
   }
 
   return (
-    <li className="text-textColor flex items-start justify-start bg-white/10 rounded-xl shadow-3xl px-8 py-9 gap-6">
-      <Image
-        src={item.image.cachedUrl}
-        width={64}
-        height={64}
-        alt={item.contract.name}
-        className=" flex-initial"
-      />
+    <li className="text-textColor min-w-[600px] flex items-start justify-between bg-[#034ee1] rounded-xl shadow-3xl px-8 py-9 gap-6 relative">
+      <div className="flex items-center gap-5">
+        <Image
+          src={item.image.cachedUrl}
+          width={64}
+          height={64}
+          alt={item.contract.name}
+          className=" flex-initial"
+        />
 
-      <div className="flex flex-col flex-shrink-0">
-        <h3 className="font-bold">
-          {item.contract.name}#{item.tokenId}
-        </h3>
-        <span className="text-sm/6 text-white/50">{item.tokenType}</span>
-        <span className="text-sm/6 text-white/50">{item.contract.symbol}</span>
+        <div className="flex flex-col flex-shrink-0 z-20">
+          <StrokedText var="h3" className="font-bold font-russo">
+            {item.contract.name}#{item.tokenId}
+          </StrokedText>
+          <span className="text-sm/6 text-white/50">{item.tokenType}</span>
+          <span className="text-sm/6 text-white/50">
+            {item.contract.symbol}
+          </span>
+        </div>
+        {/* <p className="text-sm/6 text-white/50 flex-grow">{item.description}</p> */}
       </div>
 
-      <p className="text-sm/6 text-white/50 flex-grow">{item.description}</p>
-      <Link
-        href={`https://sepolia.etherscan.io/nft/${item.contract.address}/${item.tokenId}`}
-        target="_blank"
-        className=" items-center text-xs flex gap-1"
-      >
-        See on Etherscan
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-4 h-4"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-          />
-        </svg>
-      </Link>
       <Button
         secondary
         title="Burn NFT"
         onClick={handleBurn}
         className="flex-shrink-0"
       />
+      <div className=" absolute top-2 left-2 -right-2 bg-black -bottom-2 z-[-1] rounded-xl" />
     </li>
   )
 }

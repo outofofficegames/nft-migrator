@@ -109,7 +109,7 @@ export default function MapCard() {
         width={200}
         className="mb-6"
       />
-      <div className="bg-black/10 backdrop-blur-lg rounded-xl p-6">
+      <div className="bg-[#034ee1]/10 backdrop-blur-md rounded-xl p-6">
         <div className="flex gap-4 flex-grow flex-1 justify-between">
           <WalletConnectButton />
           <PassportButton />

@@ -36,10 +36,15 @@ export default function PassportProvider({
   useEffect(() => {
     async function setUserAsync() {
       const user = await passport.getUserInfo()
-      setPassportUser(!user ? null : user)
       if (user) {
         const provider = passport.connectEvm()
-        provider.send({ method: 'eth_requestAccounts' })
+        const rpcRequest: any = await provider.send({
+          method: 'eth_requestAccounts'
+        })
+
+        setPassportUser({ ...user, address: rpcRequest.result[0] })
+      } else {
+        setPassportUser(null)
       }
     }
     setUserAsync()
