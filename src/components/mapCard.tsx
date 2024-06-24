@@ -110,7 +110,7 @@ export default function MapCard() {
         width={200}
         className="mb-6"
       />
-      <div className="bg-[#034ee1]/10 backdrop-blur-md rounded-xl p-6">
+      <div className="bg-[#034ee1]/10 backdrop-blur-md rounded-xl p-6 min-w-[600px]">
         <div className="flex gap-4 flex-grow flex-1 justify-between">
           <WalletConnectButton />
           <PassportButton />
@@ -134,7 +134,7 @@ export default function MapCard() {
             ) : (
               <Informer
                 text={
-                  'Connect your EOA wallet that you would like to migrate your nft from and destionation Passport'
+                  'Connect your EOA Wallet that you would like to migrate your nft from and the destionation Passport Wallet'
                 }
               />
             )}
