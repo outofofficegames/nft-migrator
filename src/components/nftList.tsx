@@ -5,6 +5,7 @@ import { useAccount } from 'wagmi'
 import { NFT } from '@/types'
 import Loader from './themed/loader'
 import StrokedText from './themed/strokedText'
+import Informer from './themed/informer'
 
 export async function getData(walletAddress: `0x${string}`) {
   const res = await fetch(`/api/nfts?address=${walletAddress}`, {
@@ -36,29 +37,22 @@ export default function NftList() {
   }
 
   if (isError) {
-    return (
-      <div className=" min-h-10 flex justify-center items-center">
-        Error: {error.message}
-      </div>
-    )
+    return <Informer text={`Error: ${error.message}`} />
   }
 
   if (!data) {
-    return (
-      <div className=" min-h-10 flex justify-center items-center">No data</div>
-    )
+    return <Informer text="No data" />
   }
 
   return (
     <>
-      <div className="mb-4" />
-
+      <div className="mb-6" />
       <StrokedText var="h2" className="text-5xl font-russo">
         Battle Derby Passes
       </StrokedText>
       <div className="mb-6" />
       {data.length === 0 ? (
-        <p>You do not have any NFT on {account.chain?.name}.</p>
+        <Informer text={`You do not have any Battle Derby Passes`} />
       ) : (
         <ul className="flex flex-col gap-6">
           {data.map((item) => (

@@ -2,7 +2,7 @@ import clsx from 'clsx'
 
 export default function Loader({
   size = 'lg',
-  tint = 'fill-primary',
+  tint = 'fill-blue-500'
 }: {
   size?: 'md' | 'lg'
   tint?: string

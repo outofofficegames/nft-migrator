@@ -19,13 +19,14 @@ export default function WalletConnectButton() {
       <div
         onClick={handleDisconnect}
         title="Disconnect"
-        className="flex gap-2 items-center rounded-full px-4 py-1.5 bg-white/10 border border-white/10 cursor-pointer"
+        className="flex gap-2 items-center rounded-full px-4 py-1.5 bg-white border border-white/10 cursor-pointer relative"
       >
         <Image src={WcLogo} width={30} height={30} alt="immutable passport" />
-        <span className="text-white text-sm">
+        <span className="text-[#00126D] text-sm">
           {`${account.address.slice(0, 4)}...${account.address.slice(-4)}`}
         </span>
         <Image src={PowerOffIcon} width={20} height={20} alt="logout" />
+        <div className="bg-[#00126D] absolute z-[-1] left-2 -right-2 top-2 -bottom-2 rounded-full" />
       </div>
     )
 

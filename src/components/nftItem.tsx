@@ -85,7 +85,7 @@ export default function NftItem({
         onClick={handleBurn}
         className="flex-shrink-0"
       />
-      <div className=" absolute top-2 left-2 -right-2 bg-black -bottom-2 z-[-1] rounded-xl" />
+      <div className=" absolute top-2 left-2 -right-2 bg-[#00126D] -bottom-2 z-[-1] rounded-xl" />
     </li>
   )
 }

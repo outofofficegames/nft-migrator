@@ -38,7 +38,7 @@ export default function PassportProvider({
       try {
         const user = await passport.getUserInfo()
         if (user) {
-          const provider = passport.connectEvm()
+          const provider = passport.connectEvm({ announceProvider: false })
           const rpcRequest: any = await provider.send({
             method: 'eth_requestAccounts'
           })

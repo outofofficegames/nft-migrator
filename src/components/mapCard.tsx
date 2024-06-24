@@ -10,6 +10,7 @@ import { useAccount, useSignMessage } from 'wagmi'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import Informer from './themed/informer'
+import Loader from './themed/loader'
 
 export async function getWalletMap() {
   const passportToken = await passport.getIdToken()
@@ -40,6 +41,7 @@ export default function MapCard() {
     queryKey: ['walletMap', account?.address, passportUser?.email],
     queryFn: getWalletMap,
     enabled: bothWalletConnected,
+    retry: 1,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
     refetchIntervalInBackground: false,
@@ -102,6 +104,13 @@ export default function MapCard() {
     )
   }
 
+  if (
+    passportUser === undefined ||
+    account.isConnecting ||
+    account.isReconnecting
+  )
+    return <Loader />
+
   return (
     <div className="flex flex-col items-center justify-center">
       <Image
@@ -115,17 +124,25 @@ export default function MapCard() {
           <WalletConnectButton />
           <PassportButton />
         </div>
-        {walletMap ? (
+        {walletMapFetching ? (
+          <div className="flex items-center justify-center">
+            <Loader />
+          </div>
+        ) : walletMap ? (
           <NftList />
         ) : (
           <div className=" contents">
             {bothWalletConnected ? (
               <>
-                <Informer text={'Merge your account clicking merge button'} />
+                <Informer
+                  text={
+                    'Merge your wallets by confirming origin and destination wallets. You can not change this migration map later, so double check your connected wallets!'
+                  }
+                />
                 <Button
                   onClick={handleMerge}
                   big
-                  title="Confirm Destionation Map"
+                  title="Confirm Migration Map"
                   className="w-full justify-center"
                   isLoading={walletMapFetching || isWalletMapping}
                   disabled={walletMap || !bothWalletConnected}
@@ -133,9 +150,7 @@ export default function MapCard() {
               </>
             ) : (
               <Informer
-                text={
-                  'Connect your EOA Wallet that you would like to migrate your nft from and the destionation Passport Wallet'
-                }
+                text={`Connect your ${account.address ? '' : 'EOA Wallet that you would like to migrate from'} ${account.address || passportUser ? '' : 'and'} ${passportUser ? '' : 'destination Passport Wallet'}`}
               />
             )}
           </div>
