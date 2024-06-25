@@ -4,11 +4,16 @@ import { createContext, useEffect, useState } from 'react'
 
 const clientId = process.env.NEXT_PUBLIC_IMX_CLIENT_ID
 const redirectUri = process.env.NEXT_PUBLIC_IMX_REDIRECT_URI
+const evmChainId = process.env.NEXT_PUBLIC_EVM_CHAIN_ID
+if (!evmChainId) throw new Error('NEXT_PUBLIC_EVM_CHAIN_ID not set')
 if (!clientId) throw new Error('NEXT_PUBLIC_IMX_CLIENT_ID not set')
 if (!redirectUri) throw new Error('NEXT_PUBLIC_IMX_REDIRECT_URI not set')
 export const passport = new passportInitializer.Passport({
   baseConfig: {
-    environment: config.Environment.SANDBOX,
+    environment:
+      evmChainId === '1'
+        ? config.Environment.PRODUCTION
+        : config.Environment.SANDBOX,
     publishableKey: process.env.NEXT_PUBLIC_IMX_PUB_KEY
   },
   clientId,

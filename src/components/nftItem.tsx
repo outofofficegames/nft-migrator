@@ -1,7 +1,6 @@
 import { NFT } from '@/types'
 import Image from 'next/image'
 import Button from './themed/button'
-import Link from 'next/link'
 import { useWriteContract } from 'wagmi'
 import abi from '#/abi.json'
 import { waitForTransactionReceipt } from '@wagmi/core'
@@ -9,6 +8,7 @@ import { config } from '@/providers/walletconnect'
 import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import StrokedText from './themed/strokedText'
+import { appConfig } from '@/config'
 
 export default function NftItem({
   item,
@@ -27,12 +27,8 @@ export default function NftItem({
             abi,
             address: process.env
               .NEXT_PUBLIC_ORIGIN_CONTRACT_ADDRESS as `0x${string}`,
-            functionName: 'transferFrom',
-            args: [
-              accountAddress,
-              '0x000000000000000000000000000000000000dead',
-              item.tokenId
-            ]
+            functionName: 'safeTransferFrom',
+            args: [accountAddress, appConfig.evm.burnAddress, item.tokenId]
           })
           const receipt = await waitForTransactionReceipt(config, {
             hash: txHash
