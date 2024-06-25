@@ -6,7 +6,7 @@ import WalletConnectButton from './walletConnectButton'
 import BDLogo from '#/bd-logo.png'
 import { useContext, useState } from 'react'
 import { PassportUserCtx, passport } from '@/providers/passport'
-import { useAccount, useSignMessage } from 'wagmi'
+import { useAccount, useSignMessage, useSwitchChain } from 'wagmi'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import Informer from './themed/informer'
@@ -32,6 +32,7 @@ export default function MapCard() {
   const passportUser = useContext(PassportUserCtx)
   const account = useAccount()
   const { signMessageAsync } = useSignMessage()
+  const chain = useSwitchChain()
   const client = useQueryClient()
   const [isWalletMapping, setIsWalletMapping] = useState(false)
   const bothWalletConnected =
@@ -54,7 +55,13 @@ export default function MapCard() {
         try {
           setIsWalletMapping(true)
           if (!account.address) throw new Error('No address')
-
+          if (!process.env.NEXT_PUBLIC_EVM_CHAIN_ID)
+            throw new Error('Missing target chain Id')
+          if (chain.data?.id !== +process.env.NEXT_PUBLIC_EVM_CHAIN_ID) {
+            await chain.switchChainAsync({
+              chainId: +process.env.NEXT_PUBLIC_EVM_CHAIN_ID
+            })
+          }
           const signedMessage = await signMessageAsync(
             {
               account: account.address,

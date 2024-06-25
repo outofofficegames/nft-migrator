@@ -1,7 +1,7 @@
 import { NFT } from '@/types'
 import Image from 'next/image'
 import Button from './themed/button'
-import { useWriteContract } from 'wagmi'
+import { useSwitchChain, useWriteContract } from 'wagmi'
 import abi from '#/abi.json'
 import { waitForTransactionReceipt } from '@wagmi/core'
 import { config } from '@/providers/walletconnect'
@@ -18,11 +18,22 @@ export default function NftItem({
   accountAddress: `0x${string}`
 }) {
   const { writeContractAsync } = useWriteContract()
+  const chain = useSwitchChain()
   const client = useQueryClient()
   const handleBurn = async () => {
     toast.promise(
       new Promise(async (res, rej) => {
         try {
+          if (!accountAddress) throw new Error('Missing account address')
+          if (!process.env.NEXT_PUBLIC_EVM_CHAIN_ID)
+            throw new Error('Missing target chain Id')
+
+          if (chain.data?.id !== +process.env.NEXT_PUBLIC_EVM_CHAIN_ID) {
+            await chain.switchChainAsync({
+              chainId: +process.env.NEXT_PUBLIC_EVM_CHAIN_ID
+            })
+          }
+
           const txHash = await writeContractAsync({
             abi,
             address: process.env
