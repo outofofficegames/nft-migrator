@@ -6,6 +6,10 @@ export const appConfig = {
   evm: {
     burnAddress: '0x000000000000000000000000000000000000dead'
   },
+  alchemy: {
+    sepolia: 'https://eth-sepolia.g.alchemy.com',
+    mainnet: 'https://eth-mainnet.g.alchemy.com'
+  },
   next: {
     revalidate: 1000 * 60 * 60
   }

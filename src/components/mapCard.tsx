@@ -11,6 +11,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import Informer from './themed/informer'
 import Loader from './themed/loader'
+import { getData as getBattleDerbyPasses } from './nftList'
 
 export async function getWalletMap() {
   const passportToken = await passport.getIdToken()
@@ -62,6 +63,14 @@ export default function MapCard() {
               chainId: +process.env.NEXT_PUBLIC_EVM_CHAIN_ID
             })
           }
+
+          const battleDerbyPasses = await getBattleDerbyPasses(account.address)
+
+          if (!battleDerbyPasses || battleDerbyPasses.length === 0)
+            throw new Error(
+              'You do not own any Battle Derby Passes on connected EOA Wallet'
+            )
+
           const signedMessage = await signMessageAsync(
             {
               account: account.address,
