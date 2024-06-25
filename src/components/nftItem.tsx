@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import StrokedText from './themed/strokedText'
 import { appConfig } from '@/config'
+import { useState } from 'react'
 
 export default function NftItem({
   item,
@@ -17,6 +18,7 @@ export default function NftItem({
   item: NFT
   accountAddress: `0x${string}`
 }) {
+  const [burning, setBurning] = useState(false)
   const { writeContractAsync } = useWriteContract()
   const chain = useSwitchChain()
   const client = useQueryClient()
@@ -24,6 +26,7 @@ export default function NftItem({
     toast.promise(
       new Promise(async (res, rej) => {
         try {
+          setBurning(true)
           if (!accountAddress) throw new Error('Missing account address')
           if (!process.env.NEXT_PUBLIC_EVM_CHAIN_ID)
             throw new Error('Missing target chain Id')
@@ -52,6 +55,8 @@ export default function NftItem({
           res(receipt.status)
         } catch (e) {
           rej(e)
+        } finally {
+          setBurning(false)
         }
       }),
       {
@@ -88,6 +93,7 @@ export default function NftItem({
 
       <Button
         secondary
+        isLoading={burning}
         title="Burn NFT"
         onClick={handleBurn}
         className="flex-shrink-0"
