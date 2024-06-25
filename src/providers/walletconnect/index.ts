@@ -22,7 +22,7 @@ const metadata = {
 }
 
 // Create wagmiConfig
-const chains = [process.env.evmChainId === '1' ? mainnet : sepolia] as const
+const chains = [evmChainId === '1' ? mainnet : sepolia] as const
 export const config = defaultWagmiConfig({
   chains,
   projectId,
