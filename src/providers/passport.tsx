@@ -18,20 +18,22 @@ export const passport = new passportInitializer.Passport({
   audience: 'platform_api',
   scope: 'openid offline_access email transact'
 })
-
+interface BDUserProfile extends UserProfile {
+  address?: string
+}
 // we use undefined state in initialization stage, null if initialized but no user
-export const PassportUserCtx = createContext<undefined | null | UserProfile>(
+export const PassportUserCtx = createContext<undefined | null | BDUserProfile>(
   undefined
 )
 export const PassportUserSetCtx =
-  createContext<null | React.Dispatch<UserProfile>>(null)
+  createContext<null | React.Dispatch<BDUserProfile>>(null)
 
 export default function PassportProvider({
   children
 }: {
   children: React.ReactNode
 }) {
-  const [passportUser, setPassportUser] = useState<UserProfile | null>()
+  const [passportUser, setPassportUser] = useState<BDUserProfile | null>()
 
   useEffect(() => {
     async function setUserAsync() {
