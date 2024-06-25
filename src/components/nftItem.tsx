@@ -58,7 +58,7 @@ export default function NftItem({
         loading: 'Burning the token',
         error: (e) =>
           `Error while burning: ${e instanceof Error ? e.message : 'Unknown message'}`,
-        success: 'Successfully burned'
+        success: 'Successfully burned! See it in your Immutable Passport.'
       }
     )
   }
