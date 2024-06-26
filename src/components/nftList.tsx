@@ -6,7 +6,7 @@ import { NFT } from '@/types'
 import Loader from './themed/loader'
 import StrokedText from './themed/strokedText'
 import Informer from './themed/informer'
-import Link from 'next/link'
+import Button from './themed/button'
 
 export async function getData(walletAddress: `0x${string}`) {
   const res = await fetch(`/api/nfts?address=${walletAddress}`, {
@@ -55,21 +55,20 @@ export default function NftList() {
       {data.length === 0 ? (
         <div className="flex items-center flex-col">
           <Informer
-            text={`You do not have any Battle Derby Passes in your EOA Wallet. Check your Immutable Passport for migrated NFTs.`}
+            type="success"
+            text={`Check your Immutable Passport for migrated NFTs. You do not have any Battle Derby Passes left in your EOA Wallet. `}
           />
-          <Link
-            target="_blank"
-            className="m-auto inline-block"
-            href={
-              process.env.NEXT_PUBLIC_EVM_CHAIN_ID === '1'
-                ? 'https://passport.immutable.com'
-                : 'https://passport.sandbox.immutable.com'
+          <Button
+            onClick={() =>
+              window.open(
+                process.env.NEXT_PUBLIC_EVM_CHAIN_ID === '1'
+                  ? 'https://passport.immutable.com'
+                  : 'https://passport.sandbox.immutable.com',
+                '_blank'
+              )
             }
-          >
-            <span className="text-white text-sm underline">
-              See on Immutable Passport
-            </span>
-          </Link>
+            title=" See on Immutable Passport"
+          />
         </div>
       ) : (
         <ul className="flex flex-col gap-6">
