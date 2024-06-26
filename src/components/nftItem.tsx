@@ -64,6 +64,9 @@ export default function NftItem({
         error: (e) =>
           `Error while burning: ${e instanceof Error ? e.message : 'Unknown message'}`,
         success: 'Successfully burned! See it in your Immutable Passport.'
+      },
+      {
+        duration: 7000
       }
     )
   }
