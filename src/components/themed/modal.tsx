@@ -2,7 +2,7 @@ import {
   Dialog,
   TransitionChild,
   Transition,
-  DialogPanel,
+  DialogPanel
 } from '@headlessui/react'
 interface ModalProps {
   isOpen: boolean
@@ -17,7 +17,7 @@ export default function Modal({
   setIsOpen,
   callback,
   children,
-  disabled = false,
+  disabled = false
 }: ModalProps) {
   function closeModal() {
     !disabled && setIsOpen(false)
@@ -41,7 +41,7 @@ export default function Modal({
               leaveFrom="opacity-100 transform-[scale(100%)]"
               leaveTo="opacity-0 transform-[scale(95%)]"
             >
-              <DialogPanel className="w-full max-w-3xl rounded-xl  bg-layer/95 backdrop-blur-xl shadow-2xl overflow-hidden">
+              <DialogPanel className="w-full max-w-3xl rounded-xl  bg-[#00126D]/95 backdrop-blur-xl shadow-2xl overflow-hidden">
                 {children}
               </DialogPanel>
             </TransitionChild>
