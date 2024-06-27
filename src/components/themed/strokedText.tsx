@@ -9,14 +9,8 @@ interface StrokedTextProps
 }
 export default function StrokedText({ content, ...props }: StrokedTextProps) {
   return (
-    <div className="relative">
-      <props.var
-        {...props}
-        className={clsx(
-          props.className,
-          'text-stroke bg-gradient-to-b from-secondary via-primary to-secondary bg-clip-text text-white'
-        )}
-      >
+    <div className="relative pr-[0.6rem]">
+      <props.var {...props} className={clsx(props.className, 'text-white')}>
         {content || props.children}
         <span
           className={clsx(

@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import StrokedText from './themed/strokedText'
 import { appConfig } from '@/config'
 import { useState } from 'react'
+import BDPCover from '#/bdp-cover.jpg'
 
 export default function NftItem({
   item,
@@ -75,11 +76,11 @@ export default function NftItem({
     <li className="text-textColor min-w-[600px] flex items-start justify-between bg-[#034ee1] rounded-xl shadow-3xl px-8 py-9 gap-6 relative">
       <div className="flex items-center gap-5">
         <Image
-          src={item.image.cachedUrl}
+          src={BDPCover}
           width={64}
           height={64}
           alt={item.contract.name}
-          className=" flex-initial"
+          className=" flex-initial border-2 rounded-md border-[#00126D]"
         />
 
         <div className="flex flex-col flex-shrink-0 z-20">
