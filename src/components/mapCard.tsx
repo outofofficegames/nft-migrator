@@ -135,8 +135,8 @@ export default function MapCard() {
         width={200}
         className="mb-6"
       />
-      <div className="bg-[#034ee1]/10 backdrop-blur-md rounded-xl p-6 min-w-[600px]">
-        <div className="flex gap-4 flex-grow flex-1 justify-between">
+      <div className="bg-[#034ee1]/10 backdrop-blur-md rounded-xl p-4 md:p-6 md:min-w-[600px] max-w-full md:max-w-screen-lg">
+        <div className="flex gap-4 flex-1 md:justify-between">
           <WalletConnectButton />
           <PassportButton />
         </div>

@@ -48,7 +48,10 @@ export default function NftList() {
   return (
     <>
       <div className="mb-6" />
-      <StrokedText var="h2" className="text-5xl font-russo">
+      <StrokedText
+        var="h2"
+        className="text-2xl text-center md:text-5xl font-russo"
+      >
         Battle Derby Passes
       </StrokedText>
       <div className="mb-6" />

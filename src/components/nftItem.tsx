@@ -77,7 +77,7 @@ export default function NftItem({
   }
 
   return (
-    <li className="text-textColor min-w-[600px] flex items-start justify-between bg-[#034ee1] rounded-xl shadow-3xl px-8 py-9 gap-6 relative">
+    <li className="text-textColor max-w-full md:max-w-screen-lg md:min-w-[600px] flex md:flex-row flex-col items-start justify-between bg-[#034ee1] rounded-xl shadow-3xl px-4 py-4 md:px-8 md:py-9 gap-6 relative">
       <div className="flex items-center gap-5">
         <Image
           src={BDPCover}
@@ -104,7 +104,7 @@ export default function NftItem({
         isLoading={burning}
         title="Burn NFT"
         onClick={handleBurn}
-        className="flex-shrink-0"
+        className="flex-shrink-0 w-full md:w-auto md:justify-normal justify-center"
       />
       <div className=" absolute top-2 left-2 -right-2 bg-[#00126D] -bottom-2 z-[-1] rounded-xl" />
     </li>
