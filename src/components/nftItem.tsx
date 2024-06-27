@@ -67,7 +67,11 @@ export default function NftItem({
         success: 'Successfully burned! See it in your Immutable Passport.'
       },
       {
-        duration: 7000
+        duration: 10000,
+        style: {
+          fontWeight: 'bold',
+          fontSize: '18px'
+        }
       }
     )
   }
